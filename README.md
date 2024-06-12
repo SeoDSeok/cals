@@ -2,9 +2,9 @@
 This is the project code that proceeded to extract text from the image data related to the design budget and design report through OCR at the construction site in Korea.
 
 - code/table.py
-Code for storing design budgets in a database
+ : Code for storing design budgets in a database
 - code/document.py
-Code that allows design reports to be stored in a database
+ : Code that allows design reports to be stored in a database
 
 ### Download Mask-Rcnn Model (Figure & Formular Detection)
 
