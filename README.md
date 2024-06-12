@@ -1,12 +1,10 @@
+### Code description
 This is the project code that proceeded to extract text from the image data related to the design budget and design report through OCR at the construction site in Korea.
-The .h5 file of the MRCNN model used in connection is not uploaded due to its large capacity.
 
-_Before publishing, please either delete this file, or edit it to describe your project._
-
-### Environment ( Docker image ) 
-```md
-docker pull tensorflow/tensorflow:2.7.0-gpu
-```
+- code/table.py
+Code for storing design budgets in a database
+- code/document.py
+Code that allows design reports to be stored in a database
 
 ### Download Mask-Rcnn Model (Figure & Formular Detection)
 
@@ -21,9 +19,3 @@ wget --load-cookies ~/cookies.txt "https://docs.google.com/uc?export=download&co
 python main.py [file_path] [file_type] [api_key] [url]
 ```
 
-## Mask-RCNN Custom 
-
-### code 
-```md
-git lfs pull
-```
