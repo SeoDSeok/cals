@@ -9,10 +9,10 @@ The framework integrates OCR, table detection, image detection, and text structu
 
 ConsBASE processes construction documents (e.g., design reports, budget tables) and extracts structured information such as:
 
-- Tables  
-- Figures (images)  
-- Text paragraphs  
-- Table of contents (index)  
+- Tables
+- Figures (images)
+- Text paragraphs
+- Table of contents (index)
 
 ---
 
@@ -22,11 +22,11 @@ ConsBASE processes construction documents (e.g., design reports, budget tables) 
 
 The system follows a modular pipeline:
 
-1. Table Detection (OpenCV)  
-2. OCR (PaddleOCR)  
-3. Image Detection (Mask R-CNN)  
-4. Text Structuring  
-5. JSON Construction  
+1. **Table Detection (OpenCV)**
+2. **OCR (PaddleOCR)**
+3. **Image Detection (Mask R-CNN)**
+4. **Text Structuring**
+5. **JSON Construction**
 
 ---
 
@@ -34,63 +34,107 @@ The system follows a modular pipeline:
 
 ![Pipeline](image/Framework.png)
 
+The workflow is:
+
+1. Input document (PDF/Image)
+2. Detect tables using OpenCV
+3. Extract text using OCR
+4. Detect images using Mask R-CNN
+5. Organize extracted content
+6. Generate structured JSON output
+
 ---
 
 ## 📁 Project Structure
 
 cals/
-├── environment/
+├── environment/ # Docker environment
+│ └── Dockerfile
 ├── code/
-├── data/
+│ ├── main.py
+│ ├── document.py
+│ ├── table.py
+│ ├── Utils.py
+│ ├── mrcnn/
+│ └── run
+├── data/ # Input images
 └── README.md
 
 ---
 
-## 🚀 Installation
+## 🚀 Installation & Execution Guide
 
-git clone https://github.com/SeoDSeok/cals.git  
-cd cals  
+### 1️⃣ Clone Repository
 
-cd environment  
-docker build -t consbase .  
+```bash
+git clone https://github.com/SeoDSeok/cals.git
+cd cals
+```
+### 2️⃣ Build Docker Environment
 
----
+```bash
+cd environment
+docker build -t consbase .
+```
+### 3️⃣ Download Mask R-CNN Weights
 
-## 📥 Download Weights
+We use pre-trained weights hosted on Google Drive.
 
-wget --load-cookies ~/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies ~/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/file/d/1g8KdJ9PDYQJOzxc2HAJa-SoxwI4RHukB/view?usp=sharing' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1g8KdJ9PDYQJOzxc2HAJa-SoxwI4RHukB" -O mask_custom.h5  
-
+```bash
 mv mask_custom.h5 ../code/
+```
+### 4️⃣ Run the System
 
----
+```bash
+cd ../code
+```
+Run Docker:
 
-## ▶️ Run
+```bash
+docker run -it --rm \
+-v $(pwd):/workspace \
+-v $(pwd):/data \
+-w /workspace \
+consbase \
+bash ./run
+```
+⚙️ Execution Mode
 
-cd ../code  
+Inside run file:
 
-docker run -it --rm -v $(pwd):/workspace -v $(pwd):/data -w /workspace consbase bash ./run  
+# Table extraction mode
+# python -u main.py table.png 0 <API_KEY> <OCR_URL>
 
----
-
-## ⚙️ Mode
-
-Edit run file:
-
-Table:
-python -u main.py table.png 0 <API_KEY> <OCR_URL>
-
-Document:
+# Document extraction mode
 python -u main.py document.png 1 <API_KEY> <OCR_URL>
 
----
+📄 Output
 
-## 📄 Output
+Results are saved in:
 
 /results/
 
----
+Example JSON:
 
-## ⚠️ Notes
+[
+  {
+    "page": 1,
+    "id": 1,
+    "type": "table",
+    "bbox": [50, 100, 400, 600]
+  }
+]
 
-GPU optional  
-Runs on CPU if GPU unavailable  
+
+⚠️ Notes
+GPU Usage
+
+GPU is optional
+
+Mask R-CNN runs on CPU if GPU unavailable
+
+Common Issues
+❌ Docker cannot access GPU
+could not select device driver "" with capabilities: [[gpu]]
+
+→ GPU runtime not configured (safe to ignore)
