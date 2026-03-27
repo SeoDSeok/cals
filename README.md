@@ -9,10 +9,10 @@ The framework integrates OCR, table detection, image detection, and text structu
 
 ConsBASE processes construction documents (e.g., design reports, budget tables) and extracts structured information such as:
 
-- Tables
-- Figures (images)
-- Text paragraphs
-- Table of contents (index)
+- Tables  
+- Figures (images)  
+- Text paragraphs  
+- Table of contents (index)  
 
 ---
 
@@ -22,11 +22,11 @@ ConsBASE processes construction documents (e.g., design reports, budget tables) 
 
 The system follows a modular pipeline:
 
-1. **Table Detection (OpenCV)**
-2. **OCR (PaddleOCR)**
-3. **Image Detection (Mask R-CNN)**
-4. **Text Structuring**
-5. **JSON Construction**
+1. Table Detection (OpenCV)  
+2. OCR (PaddleOCR)  
+3. Image Detection (Mask R-CNN)  
+4. Text Structuring  
+5. JSON Construction  
 
 ---
 
@@ -34,140 +34,63 @@ The system follows a modular pipeline:
 
 ![Pipeline](image/Framework.png)
 
-The workflow is:
-
-1. Input document (PDF/Image)
-2. Detect tables using OpenCV
-3. Extract text using OCR
-4. Detect images using Mask R-CNN
-5. Organize extracted content
-6. Generate structured JSON output
-
 ---
 
 ## 📁 Project Structure
 
 cals/
-├── environment/ # Docker environment
-│ └── Dockerfile
+├── environment/
 ├── code/
-│ ├── main.py
-│ ├── document.py
-│ ├── table.py
-│ ├── Utils.py
-│ ├── mrcnn/
-│ └── run
-├── data/ # Input images
+├── data/
 └── README.md
 
 ---
 
-## 🚀 Installation & Execution Guide
+## 🚀 Installation
 
-### 1️⃣ Clone Repository
+git clone https://github.com/SeoDSeok/cals.git  
+cd cals  
 
-```bash
-git clone https://github.com/SeoDSeok/cals.git
-cd cals
-```
-### 2️⃣ Build Docker Environment
+cd environment  
+docker build -t consbase .  
 
-```bash
-cd environment
-docker build -t consbase .
-```
-### 3️⃣ Download Mask R-CNN Weights
+---
 
-We use pre-trained weights hosted on Google Drive.
+## 📥 Download Weights
 
-```bash
+wget --load-cookies ~/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies ~/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/file/d/1g8KdJ9PDYQJOzxc2HAJa-SoxwI4RHukB/view?usp=sharing' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1g8KdJ9PDYQJOzxc2HAJa-SoxwI4RHukB" -O mask_custom.h5  
+
 mv mask_custom.h5 ../code/
-```
-### 4️⃣ Run the System
 
-```bash
-cd ../code
-```
-Run Docker:
+---
 
-```bash
-docker run -it --rm \
--v $(pwd):/workspace \
--v $(pwd):/data \
--w /workspace \
-consbase \
-bash ./run
-```
-⚙️ Execution Mode
+## ▶️ Run
 
-Inside run file:
+cd ../code  
 
-# Table extraction mode
-# python -u main.py table.png 0 <API_KEY> <OCR_URL>
+docker run -it --rm -v $(pwd):/workspace -v $(pwd):/data -w /workspace consbase bash ./run  
 
-# Document extraction mode
+---
+
+## ⚙️ Mode
+
+Edit run file:
+
+Table:
+python -u main.py table.png 0 <API_KEY> <OCR_URL>
+
+Document:
 python -u main.py document.png 1 <API_KEY> <OCR_URL>
-📌 Mode Selection
-Mode	Description	Setting
-Table	Extract structured table only	Uncomment first line
-Document	Full pipeline (table + image + text)	Default
-📄 Output
 
-Results are saved in:
+---
+
+## 📄 Output
 
 /results/
 
-Example JSON:
+---
 
-[
-  {
-    "page": 1,
-    "id": 1,
-    "type": "table",
-    "bbox": [50, 100, 400, 600]
-  }
-]
+## ⚠️ Notes
 
-🧠 Core Components
-1. Table Detection
-
-OpenCV morphological operations
-
-Connected component analysis
-
-2. OCR
-
-PaddleOCR (Korean optimized)
-
-Bounding box extraction
-
-3. Image Detection
-
-Mask R-CNN
-
-Optional GPU acceleration
-
-4. Text Structuring
-
-Paragraph grouping
-
-Overlap removal
-
-5. JSON Export
-
-Unified schema
-
-Spatial metadata preserved
-
-⚠️ Notes
-GPU Usage
-
-GPU is optional
-
-Mask R-CNN runs on CPU if GPU unavailable
-
-Common Issues
-❌ Docker cannot access GPU
-could not select device driver "" with capabilities: [[gpu]]
-
-→ GPU runtime not configured (safe to ignore)
+GPU optional  
+Runs on CPU if GPU unavailable  
