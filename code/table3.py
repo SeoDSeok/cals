@@ -3,12 +3,13 @@ import numpy as np
 from collections import Counter
 from itertools import groupby
 import pandas as pd
+import os
 
 # ---------- PaddleOCR ----------
 # pip install paddlepaddle-gpu==2.5.2.post120 -f https://www.paddlepaddle.org.cn/whl/mkl/stable.html  # (CUDA 환경일 때 예시)
 # pip install "paddleocr>=2.7.0"
 
-def table_improved(path, key=None, url=None, use_gpu=False, ocr_lang='korean', max_pixels=4096, out_csv="results/table_improved.csv", out_debug_png="debug_improved.png"):
+def table_improved(path, key=None, url=None, use_gpu=False, ocr_lang='korean', max_pixels=4096, out_csv="results/table_improved.csv", out_debug_png="results/debug_improved.png"):
     """
     PaddleOCR에 최적화된 개선된 테이블 추출 함수
     
@@ -25,6 +26,9 @@ def table_improved(path, key=None, url=None, use_gpu=False, ocr_lang='korean', m
         pd.DataFrame: 추출된 테이블 데이터
     """
     print("[INFO] table_improved() start - PaddleOCR backend")
+
+    os.makedirs(os.path.dirname(out_csv), exist_ok=True)
+    os.makedirs(os.path.dirname(out_debug_png), exist_ok=True)
 
     # ---------------------------
     # 이미지 로드 & 리사이즈(좌표계 일치)
@@ -294,34 +298,33 @@ def table_improved(path, key=None, url=None, use_gpu=False, ocr_lang='korean', m
 
 
 # 호환성을 위한 래퍼 함수
-def table(path, **kwargs):
-    """기존 함수명과의 호환성을 위한 래퍼"""
-    return table_improved(path, **kwargs)
+def table(path, key=None, url=None, **kwargs):
+    return table_improved(path, key=key, url=url, **kwargs)
 
 
-if __name__ == "__main__":
-    # 테스트 실행
-    import os
+# if __name__ == "__main__":
+#     # 테스트 실행
+#     import os
     
-    test_image = "../data/table.png"
-    if os.path.exists(test_image):
-        print("Testing improved table extraction...")
-        result = table_improved(
-            path=test_image,
-            use_gpu=False,
-            ocr_lang='korean',
-            max_pixels=2048,
-            out_csv="/home/skhong/ocr_proj/test_improved_output.csv",
-            out_debug_png="/home/skhong/ocr_proj/test_improved_debug.png"
-        )
-        print("Test completed!")
-        print(f"Result shape: {result.shape}")
-        if not result.empty:
-            print("Sample data:")
-            print(result.head())
-    else:
-        print(f"Test image not found: {test_image}")
-        print("Available images:")
-        for f in os.listdir("/home/skhong/ocr_proj"):
-            if f.endswith(('.png', '.jpg', '.jpeg')):
-                print(f"  - {f}") 
+#     test_image = "../data/table.png"
+#     if os.path.exists(test_image):
+#         print("Testing improved table extraction...")
+#         result = table_improved(
+#             path=test_image,
+#             use_gpu=False,
+#             ocr_lang='korean',
+#             max_pixels=2048,
+#             out_csv="/home/skhong/ocr_proj/test_improved_output.csv",
+#             out_debug_png="/home/skhong/ocr_proj/test_improved_debug.png"
+#         )
+#         print("Test completed!")
+#         print(f"Result shape: {result.shape}")
+#         if not result.empty:
+#             print("Sample data:")
+#             print(result.head())
+#     else:
+#         print(f"Test image not found: {test_image}")
+#         print("Available images:")
+#         for f in os.listdir("/home/skhong/ocr_proj"):
+#             if f.endswith(('.png', '.jpg', '.jpeg')):
+#                 print(f"  - {f}") 

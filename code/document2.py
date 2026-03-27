@@ -9,7 +9,7 @@ import os
 import Utils  
 import json
 
-def document(path):
+def document(path, key=None, url=None):
     image_path = path
     # 임시 파일 경로 설정
     output_path = './temp_output.png'
@@ -214,11 +214,29 @@ def document(path):
     for temp_file in [output_path, output_path2]:
         if os.path.exists(temp_file):
             os.remove(temp_file)
+
+    print("JSON 결과를 저장합니다...")
+
+    # 결과 폴더 생성
+    result_dir = "./results"
+    os.makedirs(result_dir, exist_ok=True)
+
+    # 파일명 생성 (입력 파일 기준)
+    filename = os.path.basename(image_path).split('.')[0]
+    json_path = os.path.join(result_dir, f"{filename}_result.json")
+
+    # JSON 저장
+    try:
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(final_json, f, indent=4, ensure_ascii=False)
+        print(f"[INFO] JSON saved to: {json_path}")
+    except Exception as e:
+        print(f"[ERROR] Failed to save JSON: {e}")
             
     return final_json
 
 # --- 코드 실행 예시 ---
 # 아래 경로를 실제 설계보고서 이미지 경로로 변경하세요.
-image_file_path = '/home/skhong/ocr_proj/data/construct/r_image/r_image_01.png'
-result = document(image_file_path)
-print(json.dumps(result, indent=4, ensure_ascii=False))
+# image_file_path = '/home/skhong/ocr_proj/data/construct/r_image/r_image_01.png'
+# result = document(image_file_path)
+# print(json.dumps(result, indent=4, ensure_ascii=False))
