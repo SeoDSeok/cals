@@ -47,19 +47,23 @@ The workflow is:
 
 ## 📁 Project Structure
 
+```bash
 cals/
-├── environment/ # Docker environment
-│ └── Dockerfile
+├── environment/                 # Docker environment
+│   └── Dockerfile
+│
 ├── code/
-│ ├── main.py
-│ ├── document.py
-│ ├── table.py
-│ ├── Utils.py
-│ ├── mrcnn/
-│ └── run
-├── data/ # Input images
+│   ├── main.py                 # Entry point
+│   ├── document.py             # Full document pipeline
+│   ├── table.py                # Table extraction module
+│   ├── Utils.py                # Mask R-CNN utilities
+│   ├── mrcnn/                  # Mask R-CNN implementation
+│   └── run                     # Execution script
+│
+├── data/                       # Input images
+│
 └── README.md
-
+```
 ---
 
 ## 🚀 Installation & Execution Guide
@@ -101,21 +105,24 @@ bash ./run
 ⚙️ Execution Mode
 
 Inside run file:
-
+```bash
 # Table extraction mode
 # python -u main.py table.png 0 <API_KEY> <OCR_URL>
 
 # Document extraction mode
 python -u main.py document.png 1 <API_KEY> <OCR_URL>
+```
 
 📄 Output
 
 Results are saved in:
-
+```bash
 /results/
+```
 
 Example JSON:
 
+```json
 [
   {
     "page": 1,
@@ -124,7 +131,7 @@ Example JSON:
     "bbox": [50, 100, 400, 600]
   }
 ]
-
+```
 
 ⚠️ Notes
 GPU Usage
