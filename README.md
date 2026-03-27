@@ -69,25 +69,25 @@ cals/
 ```bash
 git clone https://github.com/SeoDSeok/cals.git
 cd cals
-
+```
 ### 2️⃣ Build Docker Environment
 
 ```bash
 cd environment
 docker build -t consbase .
-
+```
 ### 3️⃣ Download Mask R-CNN Weights
 
 We use pre-trained weights hosted on Google Drive.
 
 ```bash
 mv mask_custom.h5 ../code/
-
+```
 ### 4️⃣ Run the System
 
 ```bash
 cd ../code
-
+```
 Run Docker:
 
 ```bash
@@ -97,7 +97,7 @@ docker run -it --rm \
 -w /workspace \
 consbase \
 bash ./run
-
+```
 ⚙️ Execution Mode
 
 Inside run file:
