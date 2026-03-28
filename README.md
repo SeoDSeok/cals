@@ -82,11 +82,18 @@ docker build -t consbase .
 ```
 ### 3️⃣ Download Mask R-CNN Weights
 
-We use pre-trained weights hosted on Google Drive.
+We use pre-trained weights hosted on Google Drive:
+
+```bash
+wget --load-cookies ~/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies ~/cookies.txt --keep-session-cookies --no-check-certificate 'https://drive.google.com/file/d/1g8KdJ9PDYQJOzxc2HAJa-SoxwI4RHukB/view?usp=sharing' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1g8KdJ9PDYQJOzxc2HAJa-SoxwI4RHukB" -O mask_custom.h5 && rm -rf ~/cookies.txt
+```
+
+Move the file:
 
 ```bash
 mv mask_custom.h5 ../code/
 ```
+
 ### 4️⃣ Run the System
 
 ```bash
@@ -142,6 +149,7 @@ Mask R-CNN runs on CPU if GPU unavailable
 
 Common Issues
 ❌ Docker cannot access GPU
+
 could not select device driver "" with capabilities: [[gpu]]
 
 → GPU runtime not configured (safe to ignore)
