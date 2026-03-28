@@ -148,6 +148,7 @@ GPU is optional
 Mask R-CNN runs on CPU if GPU unavailable
 
 Common Issues
+
 ❌ Docker cannot access GPU
 
 could not select device driver "" with capabilities: [[gpu]]
